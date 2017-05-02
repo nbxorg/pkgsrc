@@ -1,7 +1,8 @@
-# $NetBSD: Makefile,v 1.27 2017/02/04 07:12:35 maya Exp $
+# $NetBSD: Makefile,v 1.29 2017/04/22 21:03:55 adam Exp $
 
-DISTNAME=	gnupg-2.1.18
+DISTNAME=	gnupg-2.1.20
 PKGNAME=	${DISTNAME:S/gnupg-/gnupg21-/}
+PKGREVISION=	1
 CATEGORIES=	security
 MASTER_SITES=	ftp://ftp.gnupg.org/gcrypt/gnupg/
 EXTRACT_SUFX=	.tar.bz2
@@ -23,6 +24,8 @@ INFO_FILES=		yes
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--enable-g13
 
+# one test failure in 2.1.20, fixed upstream; see
+# https://dev.gnupg.org/T3047
 TEST_TARGET=		check
 
 # SunOS does have getaddrinfo() and the code knows how to use it

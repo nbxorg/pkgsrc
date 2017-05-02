@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.219 2017/01/03 17:53:14 jperkin Exp $
+# $NetBSD: Makefile,v 1.221 2017/04/20 14:38:40 joerg Exp $
 
 # Notes to package maintainers:
 #
@@ -7,7 +7,6 @@
 # change in the pkg_* tools that pkgsrc relies on for proper operation.
 
 PKGNAME=		pkg_install-${VERSION}
-PKGREVISION=		1
 CATEGORIES=		pkgtools
 
 MAINTAINER=		agc@NetBSD.org
@@ -104,8 +103,8 @@ MAKE_FLAGS+=		ACTIVE_CC=clang
 VERSION!=		${AWK} '/PKGTOOLS_VERSION/ {print $$3}' \
 			${FILESDIR}/lib/version.h
 
-# raw format appeared in libarchive 2.8.
-BUILDLINK_API_DEPENDS.libarchive+=	libarchive>=2.8.0
+# Requires 3.x filter API and bugfixes.
+BUILDLINK_API_DEPENDS.libarchive+=	libarchive>=3.3.1
 
 .include "../../archivers/bzip2/builtin.mk"
 .include "../../archivers/xz/builtin.mk"
@@ -174,9 +173,9 @@ pre-configure: config-guess-override config-sub-override
 CPPFLAGS+=	-I${WRKDIR}/libfetch
 LDFLAGS+=	-L${WRKDIR}/libfetch
 # Avoid duplicate and conflicting headers, pull in any we need
-# directly with <netpgpgverify/*.h>
+# directly with <netpgpg/*.h>
 CPPFLAGS+=	-I${WRKDIR}
-LDFLAGS+=	-L${WRKDIR}/netpgpverify
+LDFLAGS+=	-L${WRKDIR}/netpgp
 
 CONFIGURE_ENV+=	LIBS=${LIBS:Q}
 
@@ -192,7 +191,7 @@ do-extract:
 	@${CP} -R ${FILESDIR.libarchive} ${WRKDIR}/libarchive
 .endif
 	@${CP} -R ${FILESDIR.libfetch} ${WRKDIR}/libfetch
-	@${CP} -R ${FILESDIR.netpgpverify} ${WRKDIR}/netpgpverify
+	@${CP} -R ${FILESDIR.netpgpverify} ${WRKDIR}/netpgp
 
 pre-configure:
 .if empty(USE_BUILTIN.bzip2:M[yY][eE][sS])
@@ -216,7 +215,7 @@ pre-configure:
 		${SETENV} ${MAKE_ENV} ${BSD_MAKE_ENV}			\
 		${MAKE_PROGRAM} ${MAKE_FLAGS} ${BUILD_MAKE_FLAGS}	\
 			-f ${MAKE_FILE} depend all
-	cd ${WRKDIR}/netpgpverify &&					\
+	cd ${WRKDIR}/netpgp &&					\
 	${SED} -e '/zlib/d' -e 's/rsa\.o//' Makefile.lib.in >Makefile.in && \
 	${RM} -f bzlib.h zlib.h &&					\
 	${CONFIG_SHELL} ${CONFIG_SHELL_FLAGS} ./configure &&		\

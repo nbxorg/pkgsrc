@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.30 2016/12/04 04:11:32 ryoon Exp $
+# $NetBSD: buildlink3.mk,v 1.32 2017/04/24 12:25:09 wiz Exp $
 
 BUILDLINK_TREE+=	icu
 

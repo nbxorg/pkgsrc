@@ -1,7 +1,7 @@
 #!@PERL5@
 #
 # $OpenBSD: mdoclint,v 1.48 2016/01/24 20:10:48 schwarze Exp $
-# $NetBSD: mdoclint,v 1.64 2017/01/25 09:17:06 wiz Exp $
+# $NetBSD: mdoclint,v 1.66 2017/04/28 13:43:57 wiz Exp $
 #
 # Copyright (c) 2001-2017 Thomas Klausner
 # All rights reserved.
@@ -39,12 +39,12 @@ use Getopt::Std;
 use constant {
 	OPENBSD => 0,
 	NETBSD => 1,
-	SECTION_SEE_ALSO => 2,
-	SECTION_AUTHORS => 3
+	SECTION_NAME => 2,
+	SECTION_SEE_ALSO => 3,
 };
 
 use vars qw(
-	$opt_A $opt_a $opt_D $opt_d $opt_e $opt_F $opt_f $opt_H $opt_h $opt_l
+	$opt_a $opt_D $opt_d $opt_e $opt_F $opt_f $opt_H $opt_h $opt_l
 	$opt_m
 	$opt_n $opt_o $opt_P $opt_p $opt_r $opt_S $opt_s $opt_v $opt_w
 	$opt_X $opt_x
@@ -53,16 +53,15 @@ use vars qw(
 
 my $arch=`uname -m`;
 chomp($arch);
-my $options="AaDdeFfHhlmnoPprSsvwXx";
+my $options="aDdeFfHhlmnoPprSsvwXx";
 
 sub usage
 	{
-	my $default = OPENBSD ? "-AaDdfmnoPprSsXx" : "-AaDdeflmnoPprSsXx";
+	my $default = OPENBSD ? "-aDdfmnoPprSsXx" : "-aDdeflmnoPprSsXx";
 
 	print STDERR <<"EOF";
 mdoclint: verify man page correctness
 usage:	mdoclint [-$options] file ...
-	-A	warn about missing .An in AUTHORS section
 	-a	warn about SEE ALSO section problems
 	-D	warn about bad casing and archs in .Dt
 	-d	warn about bad date strings (in .Dd only)
@@ -254,12 +253,12 @@ sub handle_options
 	$opt_h and usage();
 
 	# default to all warnings if no flag is set
-	unless ($opt_A or $opt_a or $opt_D or $opt_d or $opt_e
+	unless ($opt_a or $opt_D or $opt_d or $opt_e
 		or $opt_f or $opt_H or $opt_l
 		or $opt_m or $opt_n
 		or $opt_o or $opt_P or $opt_p or $opt_r
 		or $opt_S or $opt_s or $opt_X or $opt_x) {
-		$opt_A = $opt_a = $opt_D = $opt_d = $opt_f = $opt_m =
+		$opt_a = $opt_D = $opt_d = $opt_f = $opt_m =
 		    $opt_n = $opt_o = $opt_P = $opt_p = $opt_r = $opt_S =
 		    $opt_s = $opt_X = $opt_x = 1;
 		$opt_e = $opt_l = 1 if NETBSD;
@@ -270,7 +269,7 @@ sub handle_options
 sub verify_xref
 {
 	my ($self, $page, $section, $pre, $post) = @_;
-	if ("$page.$section" eq $self->{fn}) {
+	if ($self->{names}{$page.$section}) {
 		$self->warning("Xref to itself (use .Nm instead)") if $opt_x;
 	}
 	# try to find corresponding man page
@@ -315,14 +314,16 @@ sub new
 		sasection => 0,
 		saname => '',
 		sarest => ',',
-		inauthors => 0,
 		in_section => 0,
 		inliteral => 0,
 		shseen => {},
 		last_error_name => '',
 		current_section_header => '',
+		sec => '0',
+		names => { $fn => 1 },
 		fn => $fn
 	};
+	$o->{sec} = $1 if $fn =~ /\.(.+?)$/;
 	open my $input, '<', $fn or die "can't open input file $fn";
 	$o->{file} = $input;
 	$o->{ln} = 0;
@@ -375,12 +376,6 @@ sub end_of_section
 		# to avoid a second warning at EOF
 		$s->{sarest} = "";
 	}
-
-	if ($s->{in_section} == SECTION_AUTHORS) {
-	    if (!$s->{an_found}) {
-		$s->warning("missing .An in AUTHORS section") if $opt_A;
-	    }
-	}
 }
 
 sub set_section_header
@@ -390,10 +385,10 @@ sub set_section_header
 
 	end_of_section($s);
 
-	if ($section_header eq 'SEE ALSO') {
+	if ($section_header eq 'NAME') {
+		$s->{in_section} = SECTION_NAME;
+	} elsif ($section_header eq 'SEE ALSO') {
 		$s->{in_section} = SECTION_SEE_ALSO;
-	} elsif ($section_header eq 'AUTHORS') {
-		$s->{in_section} = SECTION_AUTHORS;
 	} else {
 		$s->{in_section} = 0;
 	}
@@ -469,9 +464,11 @@ sub process_line
 #	    	$section = $1;
 #	}
 	if (/^\.Dt\s+/o) {
-	    if (! /^\.Dt\s+(?:[A-Z\d._-]+)\s+$sections_re(?:\s+$arches_re)?$/o)  {
-		    $s->warning("bad .Dt: `$_'") if $opt_D;
-	    }
+		if (/^\.Dt\s+(?:[A-Z\d._-]+)\s+($sections_re)(?:\s+$arches_re)?$/o)  {
+			$s->{sec} = $1;
+		} else {
+			$s->warning("bad .Dt: `$_'") if $opt_D;
+		}
 	}
 
 	if ($s->{mandoc_p}) {
@@ -488,7 +485,11 @@ sub process_line
 		}
 	}
 
-	if ($s->{in_section} == SECTION_SEE_ALSO) {
+	if ($s->{in_section} == SECTION_NAME) {
+		if (/^\.Nm\s+(\S+)/o) {
+			$s->{names}{$1.$s->{sec}} = 1;
+		}
+	} elsif ($s->{in_section} == SECTION_SEE_ALSO) {
 		if (/^\.Xr\s+(\S+)\s+($sections_re)\s?(.*)?$/o) {
 			my ($saname, $sasection, $sarest) = ($1, $2, $3);
 			$saname =~ s/^\\&//o;
@@ -514,11 +515,6 @@ sub process_line
 				    "`$s->{sarest}'") if $opt_a;
 			}
 			$s->{sarest} = "";
-		}
-	}
-	if ($s->{in_section} == SECTION_AUTHORS) {
-		if (/^\.An / && not /^\.An -(no|)split/) {
-			$s->{an_found} = 1;
 		}
 	}
 

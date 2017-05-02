@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.524 2017/03/14 13:20:14 wiz Exp $
+# $NetBSD: Makefile,v 1.526 2017/04/23 03:39:53 markd Exp $
 
 COMMENT=	Databases
 
@@ -358,6 +358,7 @@ SUBDIR+=	py-mysqldb
 SUBDIR+=	py-orderedmultidict
 SUBDIR+=	py-peewee
 SUBDIR+=	py-pgnotify
+SUBDIR+=	py-pickleshare
 SUBDIR+=	py-postgresql
 SUBDIR+=	py-psycopg2
 SUBDIR+=	py-pymysql
@@ -396,6 +397,7 @@ SUBDIR+=	ruby-activeldap
 SUBDIR+=	ruby-activerecord-cassandra
 SUBDIR+=	ruby-activerecord-odbc
 SUBDIR+=	ruby-activerecord32
+SUBDIR+=	ruby-activerecord42
 SUBDIR+=	ruby-arel
 SUBDIR+=	ruby-arel30
 SUBDIR+=	ruby-awesome_nested_set

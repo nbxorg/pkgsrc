@@ -1,4 +1,4 @@
-# $NetBSD: mozilla-common.mk,v 1.90 2017/03/20 10:54:46 szptvlfn Exp $
+# $NetBSD: mozilla-common.mk,v 1.94 2017/05/01 00:13:45 ryoon Exp $
 #
 # common Makefile fragment for mozilla packages based on gecko 2.0.
 #
@@ -29,8 +29,7 @@ test:
 TOOLS_PLATFORM.tar=	${TOOLS_PATH.bsdtar}
 USE_TOOLS+=		bsdtar
 .endif
-# GCC 4.6 is required to support nullptr.
-GCC_REQD+=		4.8
+GCC_REQD+=		4.9
 .if ${MACHINE_ARCH} == "i386"
 # Fix for PR pkg/48152.
 CXXFLAGS+=		-march=i586
@@ -51,7 +50,8 @@ CONFIGURE_ARGS+=	--with-pthreads
 CONFIGURE_ARGS+=	--enable-system-cairo
 CONFIGURE_ARGS+=	--enable-system-pixman
 CONFIGURE_ARGS+=	--with-system-libvpx
-CONFIGURE_ARGS+=	--enable-system-hunspell
+# textproc/hunspell 1.3 is too old
+#CONFIGURE_ARGS+=	--enable-system-hunspell
 CONFIGURE_ARGS+=	--enable-system-ffi
 CONFIGURE_ARGS+=	--with-system-icu
 CONFIGURE_ARGS+=	--with-system-nss
@@ -73,6 +73,8 @@ CONFIGURE_ARGS+=	--enable-extensions=gio
 CONFIGURE_ARGS+=	--enable-url-classifier
 CONFIGURE_ARGS+=	--disable-icf
 CONFIGURE_ARGS+=	--disable-updater
+
+CONFIGURE_ARGS+=	--disable-rust
 
 SUBST_CLASSES+=			fix-paths
 SUBST_STAGE.fix-paths=		pre-configure
@@ -181,7 +183,7 @@ BUILDLINK_API_DEPENDS.libevent+=	libevent>=1.1
 BUILDLINK_API_DEPENDS.nspr+=	nspr>=4.10.10
 .include "../../devel/nspr/buildlink3.mk"
 .include "../../textproc/icu/buildlink3.mk"
-BUILDLINK_API_DEPENDS.nss+=	nss>=3.28.1
+BUILDLINK_API_DEPENDS.nss+=	nss>=3.29.5
 .include "../../devel/nss/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../mk/jpeg.buildlink3.mk"
@@ -191,7 +193,8 @@ BUILDLINK_API_DEPENDS.cairo+=	cairo>=1.10.2nb4
 BUILDLINK_API_DEPENDS.libvpx+=	libvpx>=1.3.0
 .include "../../multimedia/libvpx/buildlink3.mk"
 .include "../../net/libIDL/buildlink3.mk"
-.include "../../textproc/hunspell/buildlink3.mk"
+# textproc/hunspell 1.3 is too old
+#.include "../../textproc/hunspell/buildlink3.mk"
 .include "../../multimedia/ffmpeg3/buildlink3.mk"
 .include "../../x11/libXt/buildlink3.mk"
 BUILDLINK_API_DEPENDS.pixman+= pixman>=0.25.2

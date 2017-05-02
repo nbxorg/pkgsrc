@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.55 2017/01/01 16:06:00 adam Exp $
+# $NetBSD: Makefile,v 1.57 2017/05/01 12:54:17 wiz Exp $
 
 DISTNAME=	strigi-0.7.8
-PKGREVISION=	17
+PKGREVISION=	18
 CATEGORIES=	sysutils
 MASTER_SITES=	http://www.vandenoever.info/software/strigi/
 EXTRACT_SUFX=	.tar.bz2
@@ -17,6 +17,8 @@ USE_CMAKE=	yes
 
 PKGCONFIG_OVERRIDE+=	src/streamanalyzer/libstreamanalyzer.pc.cmake
 PKGCONFIG_OVERRIDE+=	src/streams/libstreams.pc.cmake
+
+CXXFLAGS+=	-std=c++11
 
 .include "../../mk/bsd.prefs.mk"
 .if ${OPSYS} == "NetBSD" && exists(/usr/include/sys/pset.h)

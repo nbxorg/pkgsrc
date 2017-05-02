@@ -1,4 +1,4 @@
-# $NetBSD: rails.mk,v 1.55 2016/08/21 05:55:08 taca Exp $
+# $NetBSD: rails.mk,v 1.59 2017/04/22 10:46:18 minskim Exp $
 
 .if !defined(_RUBY_RAILS_MK)
 _RUBY_RAILS_MK=	# defined
@@ -9,7 +9,7 @@ _RUBY_RAILS_MK=	# defined
 # RUBY_RAILS_DEFAULT
 #	Select default Ruby on Rails version.
 #
-#	Possible values: 32
+#	Possible values: 32 42
 #	Default: 32
 #
 #
@@ -18,7 +18,7 @@ _RUBY_RAILS_MK=	# defined
 # RUBY_RAILS_SUPPORTED
 #	The Ruby on Rails versions that are acceptable for the package.
 #
-#	Possible values: 32
+#	Possible values: 32 42
 #	Default: (empty)
 #
 # RUBY_RAILS_STRICT_DEP
@@ -32,13 +32,14 @@ _RUBY_RAILS_MK=	# defined
 # RUBY_RAILS
 #	Selected Ruby on Rails version.
 #
-#	Possible values: 32
+#	Possible values: 32 42
 #
 
 #
 # current Ruby on Rails versions.
 #
 RUBY_RAILS32_VERSION?=	3.2.22.4
+RUBY_RAILS42_VERSION?=	4.2.8
 
 RUBY_RAILS_SUPPORTED?=	# defined
 RUBY_RAILS_DEFAULT?=	32
@@ -64,7 +65,11 @@ RUBY_RAILS:=	${RUBY_RAILS_DEFAULT}
 . endif
 .endif
 
+.if ${RUBY_RAILS} == "42"
+RUBY_RAILS_VERSION:=	${RUBY_RAILS42_VERSION}
+.else
 RUBY_RAILS_VERSION:=	${RUBY_RAILS32_VERSION}
+.endif
 
 #
 # Components of Ruby's version.
@@ -96,6 +101,7 @@ MULTI+=			RUBY_RAILS_DEFAULT=${RUBY_RAILS} \
 
 RUBY_ACTIVESUPPORT?=	${RUBY_RAILS_VERSION}
 RUBY_ACTIONPACK?=	${RUBY_RAILS_VERSION}
+RUBY_ACTIONVIEW?=	${RUBY_RAILS_VERSION}
 RUBY_ACTIVERECORD?=	${RUBY_RAILS_VERSION}
 RUBY_ACTIVERESOURCE?=	${RUBY_RAILS_VERSION}
 RUBY_ACTIONMAILER?=	${RUBY_RAILS_VERSION}
@@ -110,6 +116,36 @@ RUBY_RAILS32_ACTIONMAILER=	../../mail/ruby-actionmailer32
 RUBY_RAILS32_RAILTIES=		../../devel/ruby-railties32
 RUBY_RAILS32_RAILS=		../../www/ruby-rails32
 
+RUBY_RAILS42_ACTIVEJOB=		../../devel/ruby-activejob42
+RUBY_RAILS42_ACTIVESUPPORT=	../../devel/ruby-activesupport42
+RUBY_RAILS42_ACTIVEMODEL=	../../devel/ruby-activemodel42
+RUBY_RAILS42_ACTIONPACK=	../../www/ruby-actionpack42
+RUBY_RAILS42_ACTIVERECORD=	../../databases/ruby-activerecord42
+RUBY_RAILS42_ACTIONMAILER=	../../mail/ruby-actionmailer42
+RUBY_RAILS42_RAILTIES=		../../devel/ruby-railties42
+RUBY_RAILS42_RAILS=		../../www/ruby-rails42
+RUBY_RAILS42_ACTIONVIEW=	../../www/ruby-actionview42
+
+.if ${RUBY_RAILS} == "42"
+RUBY_ACTIVESUPPORT_DEPENDS= \
+	${RUBY_PKGPREFIX}-activesupport${_RAILS_DEP}:${RUBY_RAILS42_ACTIVESUPPORT}
+RUBY_ACTIVEMODEL_DEPENDS= \
+	${RUBY_PKGPREFIX}-activemodel${_RAILS_DEP}:${RUBY_RAILS42_ACTIVEMODEL}
+RUBY_ACTIONPACK_DEPENDS= \
+	${RUBY_PKGPREFIX}-actionpack${_RAILS_DEP}:${RUBY_RAILS42_ACTIONPACK}
+RUBY_ACTIONVIEW_DEPENDS= \
+	${RUBY_PKGPREFIX}-actionview${_RAILS_DEP}:${RUBY_RAILS42_ACTIONVIEW}
+RUBY_ACTIVEJOB_DEPENDS= \
+	${RUBY_PKGPREFIX}-activejob${_RAILS_DEP}:${RUBY_RAILS42_ACTIVEJOB}
+RUBY_ACTIVERECORD_DEPENDS= \
+	${RUBY_PKGPREFIX}-activerecord${_RAILS_DEP}:${RUBY_RAILS42_ACTIVERECORD}
+RUBY_ACTIONMAILER_DEPENDS= \
+	${RUBY_PKGPREFIX}-actionmailer${_RAILS_DEP}:${RUBY_RAILS42_ACTIONMAILER}
+RUBY_RAILTIES_DEPENDS= \
+	${RUBY_PKGPREFIX}-railties${_RAILS_DEP}:${RUBY_RAILS42_RAILTIES}
+RUBY_RAILS_DEPENDS= \
+	${RUBY_PKGPREFIX}-rails${_RAILS_DEP}:${RUBY_RAILS42_RAILS}
+.else
 RUBY_ACTIVESUPPORT_DEPENDS= \
 	${RUBY_PKGPREFIX}-activesupport${_RAILS_DEP}:${RUBY_RAILS32_ACTIVESUPPORT}
 RUBY_ACTIVEMODEL_DEPENDS= \
@@ -126,5 +162,6 @@ RUBY_RAILTIES_DEPENDS= \
 	${RUBY_PKGPREFIX}-railties${_RAILS_DEP}:${RUBY_RAILS32_RAILTIES}
 RUBY_RAILS_DEPENDS= \
 	${RUBY_PKGPREFIX}-rails${_RAILS_DEP}:${RUBY_RAILS32_RAILS}
+.endif
 
 .endif

@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.189 2017/03/26 04:05:40 ryoon Exp $
+# $NetBSD: Makefile,v 1.192 2017/05/01 05:50:08 ryoon Exp $
 
 DISTNAME=	thunderbird-${TB_VER}.source
 PKGNAME=	thunderbird-${TB_VER}
-TB_VER=		45.8.0
+TB_VER=		52.1.0
 CATEGORIES=	mail
 MASTER_SITES=	${MASTER_SITE_MOZILLA:=thunderbird/releases/${TB_VER}/source/}
 EXTRACT_SUFX=	.tar.xz
@@ -49,6 +49,12 @@ CHECK_INTERPRETER_SKIP+=lib/thunderbird-sdk/sdk/bin/typelib.py
 CHECK_INTERPRETER_SKIP+=lib/thunderbird-sdk/sdk/bin/xpidl.py
 CHECK_INTERPRETER_SKIP+=lib/thunderbird-sdk/sdk/bin/xpt.py
 
+CHECK_WRKREF_SKIP+=lib/thunderbird/chrome/toolkit/content/global/buildconfig.html
+
+post-extract:
+	mv ${WRKSRC}/mozilla/gfx/ycbcr/yuv_row_arm.s \
+		${WRKSRC}/mozilla/gfx/ycbcr/yuv_row_arm.S
+
 pre-configure:
 	cd ${WRKSRC} && mkdir ${OBJDIR}
 	cd ${WRKSRC} && ${SETENV} ${CONFIGURE_ENV} autoconf
@@ -89,7 +95,7 @@ post-install:
 	   ${DESTDIR}${PREFIX}/lib/${MOZILLA}/extensions/.
 	rm -rf ${WRKDIR}/extensions
 
-.include "../../www/firefox45/mozilla-common.mk"
+.include "../../www/firefox52/mozilla-common.mk"
 .include "options.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
 .include "../../mk/bsd.pkg.mk"

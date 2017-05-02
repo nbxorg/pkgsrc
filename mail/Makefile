@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.488 2017/04/09 02:57:38 mef Exp $
+# $NetBSD: Makefile,v 1.493 2017/04/27 13:50:38 ryoon Exp $
 #
 
 COMMENT=	Electronic mail utilities
@@ -285,7 +285,9 @@ SUBDIR+=	prayer
 SUBDIR+=	procmail
 SUBDIR+=	proxsmtp
 SUBDIR+=	pulsar
+SUBDIR+=	py-aiosmtpd
 SUBDIR+=	py-authres
+SUBDIR+=	py-flufl.bounce
 SUBDIR+=	py-libgmail
 SUBDIR+=	py-policyd-spf
 SUBDIR+=	py-sendmail-admin
@@ -319,6 +321,7 @@ SUBDIR+=	roundcube-plugin-zipdownload
 SUBDIR+=	rspamd
 SUBDIR+=	rss2email
 SUBDIR+=	ruby-actionmailer32
+SUBDIR+=	ruby-actionmailer42
 SUBDIR+=	ruby-mail
 SUBDIR+=	ruby-mail25
 SUBDIR+=	ruby-mailfactory
@@ -365,6 +368,8 @@ SUBDIR+=	thunderbird31
 SUBDIR+=	thunderbird31-l10n
 SUBDIR+=	thunderbird38
 SUBDIR+=	thunderbird38-l10n
+SUBDIR+=	thunderbird45
+SUBDIR+=	thunderbird45-l10n
 SUBDIR+=	tmda
 SUBDIR+=	tnef
 SUBDIR+=	tnef2txt
