@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.21 2017/04/10 19:49:59 maya Exp $
+# $NetBSD: Makefile,v 1.23 2017/05/03 08:38:43 jperkin Exp $
 
 DISTNAME=	llvm-4.0.0.src
 PKGNAME=	${DISTNAME:S/llvm/libLLVM/:S/.src//}
@@ -12,7 +12,7 @@ HOMEPAGE=	http://llvm.org/
 COMMENT=	Low Level Virtual Machine shared library
 LICENSE=	modified-bsd
 
-USE_LANGUAGES=		c c++
+USE_LANGUAGES=		c c++11
 USE_CMAKE=		yes
 GCC_REQD+=		4.8
 PYTHON_FOR_BUILD_ONLY=	yes
@@ -23,6 +23,7 @@ CMAKE_ARG_PATH=		${WRKSRC}
 CMAKE_ARGS+=	-DCMAKE_BUILD_TYPE=Release
 CMAKE_ARGS+=	-DCMAKE_C_COMPILER=gcc
 CMAKE_ARGS+=	-DCMAKE_CXX_COMPILER=g++
+CMAKE_ARGS+=	-DCMAKE_CXX_LINK_FLAGS=${LDFLAGS:Q}
 CMAKE_ARGS+=	-DLLVM_BUILD_LLVM_DYLIB=ON
 CMAKE_ARGS+=	-DLLVM_LINK_LLVM_DYLIB=ON
 CMAKE_ARGS+=	-DLLVM_INCLUDE_TESTS=OFF
@@ -110,10 +111,6 @@ PLIST_SUBST+=	SOEXT=${SOEXT}
 PLIST_SUBST+=	LLVM_LIBNAME=${LLVM_LIBNAME}
 
 .include "options.mk"
-
-# At least LLVM 3.9.0 and subprojects don't correctly add C++11 flags
-# automatically.
-CXXFLAGS+=	-std=c++11
 
 # needs std::atomic with 64-bit CAS
 .if ${MACHINE_ARCH} == "i386"
