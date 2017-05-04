@@ -19,3 +19,9 @@ GOCHAR=		5
 .endif
 PLIST_SUBST+=	GO_PLATFORM=${LOWER_OPSYS:Q}_${GOARCH:Q} GOARCH=${GOARCH:Q}
 PLIST_SUBST+=	GOCHAR=${GOCHAR:Q}
+
+# Disable stack protection for go and all go based packages.
+# Stack protection causes binaries to link libssp dynamically,
+# whereas go normally links everything statically, resulting in
+# random runtime linking against unsanctioned GCC libs.
+_PKGSRC_USE_SSP=	no
