@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.19 2017/04/22 21:03:28 adam Exp $
+# $NetBSD: Makefile,v 1.21 2017/05/03 08:38:39 jperkin Exp $
 #
 
 DISTNAME=	soci-3.2.2
-PKGREVISION=	16
+PKGREVISION=	17
 CATEGORIES=	databases
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=soci/}
 
@@ -12,13 +12,9 @@ COMMENT=	C++ database access library
 LICENSE=	boost-license
 
 USE_CMAKE=	yes
-USE_LANGUAGES=	c c++
+USE_LANGUAGES=	c gnu++11
 
 CMAKE_ARGS+=	-DSOCI_LIBDIR=lib
-
-.include "../../mk/bsd.prefs.mk"
-
-CXXFLAGS.Cygwin+=	-std=gnu++11
 CMAKE_ARGS+=	-DCMAKE_CXX_FLAGS=${CXXFLAGS:Q}
 
 .include "options.mk"

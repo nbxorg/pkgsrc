@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.39 2017/01/01 16:06:37 adam Exp $
+# $NetBSD: Makefile,v 1.41 2017/05/03 08:38:45 jperkin Exp $
 
 DISTNAME=	FlightCrew-0.7.2-Code
 PKGNAME=	${DISTNAME:S/-Code//}
-PKGREVISION=	30
+PKGREVISION=	31
 CATEGORIES=	textproc
 MASTER_SITES=	http://flightcrew.googlecode.com/files/
 EXTRACT_SUFX=	.zip
@@ -14,7 +14,7 @@ LICENSE=	gnu-lgpl-v3 AND cc-by-sa-v3.0
 
 WRKSRC=		${WRKDIR}
 
-USE_LANGUAGES=	c c++
+USE_LANGUAGES=	c c++11
 USE_CMAKE=	yes
 
 BUILDLINK_TRANSFORM+=	l:BoostParts:boost_date_time:boost_filesystem:boost_regex:boost_system:boost_thread:boost_program_options
@@ -35,16 +35,6 @@ SUBST_FILES.d2u=	CMakeLists.txt
 SUBST_FILES.d2u+=	src/FlightCrew/tests/CMakeLists.txt
 SUBST_FILES.d2u+=	src/FlightCrew/Validators/Opf/ReachabilityAnalysis.cpp
 SUBST_FILTER_CMD.d2u=	${TR} -d '\r'
-
-.include "../../mk/compiler.mk"
-# GCC 4.4 and above needs this
-.if !empty(PKGSRC_COMPILER:Mgcc) && !empty(CC_VERSION:Mgcc-4.[4-9]*)
-_WRAP_EXTRA_ARGS.CXX+=	-std=c++0x
-CWRAPPERS_APPEND.cxx+=	-std=c++0x
-.elif !empty(PKGSRC_COMPILER:Mclang)
-_WRAP_EXTRA_ARGS.CXX+=	-std=c++11
-CWRAPPERS_APPEND.cxx+=	-std=c++11
-.endif
 
 post-extract:
 	${RM} -rf ${WRKDIR}/src/BoostParts ${WRKDIR}/src/Xerces ${WRKDIR}/src/zlib ${WRKDIR}/src/googlemock
