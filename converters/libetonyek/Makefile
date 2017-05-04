@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.13 2017/01/01 16:05:56 adam Exp $
+# $NetBSD: Makefile,v 1.15 2017/05/03 08:38:39 jperkin Exp $
 
 DISTNAME=	libetonyek-0.1.6
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	converters
 MASTER_SITES=	http://dev-www.libreoffice.org/src/
 EXTRACT_SUFX=	.tar.bz2
@@ -16,10 +16,7 @@ TOOL_DEPENDS+=	gperf-[0-9]*:../../devel/gperf
 GNU_CONFIGURE=	yes
 USE_LIBTOOL=	yes
 USE_TOOLS+=	gmake pkg-config
-USE_LANGUAGES=	c c++
-
-# Boost qi.hpp
-CXXFLAGS+=	-std=c++0x
+USE_LANGUAGES=	c c++0x
 
 CONFIGURE_ARGS+=	--disable-tests
 CONFIGURE_ARGS+=	--without-docs
