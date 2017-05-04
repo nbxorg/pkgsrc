@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.6 2017/01/01 16:06:39 adam Exp $
+# $NetBSD: Makefile,v 1.8 2017/05/03 08:38:45 jperkin Exp $
 
 DISTNAME=	yahttp-0.1.5
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	www
 MASTER_SITES=	${MASTER_SITE_GITHUB:=cmouse/}
 GITHUB_RELEASE=	v${PKGVERSION_NOREV}
@@ -13,13 +13,8 @@ LICENSE=	mit
 
 GNU_CONFIGURE=	yes
 USE_LIBTOOL=	yes
-USE_LANGUAGES=	c c++
+USE_LANGUAGES=	c c++11
 USE_TOOLS+=	aclocal autoconf autoheader automake
-
-.include "../../mk/compiler.mk"
-.if !empty(PKGSRC_COMPILER:Mclang)
-CXXFLAGS+=	-std=c++11
-.endif
 
 pre-configure:
 	set -e; cd ${WRKSRC}; \

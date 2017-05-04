@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.2428 2017/04/27 06:34:08 jnemeth Exp $
+# $NetBSD: Makefile,v 1.2430 2017/05/04 07:41:47 taca Exp $
 #
 
 COMMENT=	Development utilities
@@ -309,6 +309,7 @@ SUBDIR+=	go-nbreader
 SUBDIR+=	go-protobuf
 SUBDIR+=	go-ratelimit
 SUBDIR+=	go-review
+SUBDIR+=	go-sys
 SUBDIR+=	go-termbox
 SUBDIR+=	go-testify
 SUBDIR+=	go-tools
@@ -2204,7 +2205,6 @@ SUBDIR+=	ruby-rb-kqueue
 SUBDIR+=	ruby-rbtree
 SUBDIR+=	ruby-rcsparse
 SUBDIR+=	ruby-rd-mode
-SUBDIR+=	ruby-rdoc
 SUBDIR+=	ruby-readline
 SUBDIR+=	ruby-redmine
 SUBDIR+=	ruby-redmine-flatly-light-theme
