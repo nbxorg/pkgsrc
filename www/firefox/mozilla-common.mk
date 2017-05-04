@@ -1,4 +1,4 @@
-# $NetBSD: mozilla-common.mk,v 1.91 2017/04/27 01:49:47 ryoon Exp $
+# $NetBSD: mozilla-common.mk,v 1.94 2017/05/01 00:13:45 ryoon Exp $
 #
 # common Makefile fragment for mozilla packages based on gecko 2.0.
 #
@@ -29,8 +29,7 @@ test:
 TOOLS_PLATFORM.tar=	${TOOLS_PATH.bsdtar}
 USE_TOOLS+=		bsdtar
 .endif
-# GCC 4.6 is required to support nullptr.
-GCC_REQD+=		4.8
+GCC_REQD+=		4.9
 .if ${MACHINE_ARCH} == "i386"
 # Fix for PR pkg/48152.
 CXXFLAGS+=		-march=i586
@@ -184,7 +183,7 @@ BUILDLINK_API_DEPENDS.libevent+=	libevent>=1.1
 BUILDLINK_API_DEPENDS.nspr+=	nspr>=4.10.10
 .include "../../devel/nspr/buildlink3.mk"
 .include "../../textproc/icu/buildlink3.mk"
-BUILDLINK_API_DEPENDS.nss+=	nss>=3.28.1
+BUILDLINK_API_DEPENDS.nss+=	nss>=3.29.5
 .include "../../devel/nss/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../mk/jpeg.buildlink3.mk"

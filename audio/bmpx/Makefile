@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.86 2017/04/22 21:03:23 adam Exp $
+# $NetBSD: Makefile,v 1.88 2017/05/03 08:38:38 jperkin Exp $
 
 DISTNAME=	bmpx-0.40.14
-PKGREVISION=	59
+PKGREVISION=	60
 CATEGORIES=	audio
 MASTER_SITES=	http://files.backtrace.info/releases/0.40/
 EXTRACT_SUFX=	.tar.bz2
@@ -11,7 +11,7 @@ HOMEPAGE=	http://bmpx.backtrace.info/site/BMPx_Homepage
 COMMENT=	Audio player to be used with a frontend or as a daemon
 
 GNU_CONFIGURE=		yes
-USE_LANGUAGES=		c c++
+USE_LANGUAGES=		c c++11
 USE_TOOLS+=		gmake intltool msgfmt pkg-config zip
 USE_LIBTOOL=		yes
 USE_PKGLOCALEDIR=	yes
@@ -23,7 +23,6 @@ CHECK_WRKREF_SKIP+=	bin/bmp2
 CHECK_WRKREF_SKIP+=	libexec/beep-media-player-2-bin
 
 GCC_REQD+=	4.8
-CXXFLAGS+=	-std=c++11
 
 .include "../../mk/bsd.fast.prefs.mk"
 .if ${OPSYS} == "Linux"
