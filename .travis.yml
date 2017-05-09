@@ -1,6 +1,7 @@
 dist: trusty
 sudo: false
 language: erlang 
+install: skip
 
 script:
   - wget -O- https://tmvg.home.xs4all.nl/travis/debootstrap.sh | sh -
@@ -18,3 +19,5 @@ addons:
     packages:
     - ca-certificates
     - debootstrap
+    - fakeroot
+    - fakechroot
