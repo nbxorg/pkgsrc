@@ -3,9 +3,6 @@ sudo: required
 language: erlang 
 install: skip
 
-before_script:
-  - git clone --depth 1 https://github.com/nbxorg/pkgbuild.git
-
 script:
   - wget -O- https://tmvg.home.xs4all.nl/travis/debootstrap.sh | sh -
 
