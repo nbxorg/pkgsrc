@@ -1,11 +1,8 @@
-sudo: required
-language: generic
-
-services:
-  - docker
+sudo: false
+language: erlang 
 
 script:
-  - wget -O- https://tmvg.home.xs4all.nl/travis/script.sh | sh -
+  - wget -O- https://tmvg.home.xs4all.nl/travis/debootstrap.sh | sh -
 
 branches:
   except:
