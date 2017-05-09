@@ -10,3 +10,7 @@ script:
 branches:
   except:
     - /^debian\/\d/
+
+git:
+  depth: 3
+  lfs_skip_smudge: true
