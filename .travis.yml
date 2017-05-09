@@ -11,3 +11,9 @@ branches:
 git:
   depth: 3
   lfs_skip_smudge: true
+
+addons:
+  apt:
+    packages:
+    - ca-certificates
+    - debootstrap
